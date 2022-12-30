@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    {% load mathfilters %}
+    <h1><b>FREE BOARD</b></h1>
+
+    <div class="text-end">
+        <a class="btn btn-dark" href="{% url 'board:create' %}">WRITE</a>
+    </div>
+
+    <table class="table table-hover mt-4">
+        <thead>
+            <tr class="table-dark">
+                <th scope="col">NO</th>
+                <th scope="col">SUBJECT</th>
+                <th scope="col">WRITER</th>
+                <th scope="col">SUMMARY</th>
+                <th scope="col">LIKEY</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for i in bset %}
+                <tr>
+                    <th scope="row">{{cnt|sub:forloop.counter0|add:1|sub:bset.start_index}}</th>
+                    <td><a href="{% url 'board:detail' i.id %}" class="sub">{{i.subject}}</a></td>
+                    <td>{{i.writer}}</td>
+                    <td>{{i.content|truncatewords:10}}</td>
+                    <td>{{i.likey.count}}</td>
+                </tr>
+            {% empty %}
+                <tr class="text-center">
+                    {% if kw %}
+                        <td colspan="5"><h4>검색 결과가 없습니다.</h4></td>
+                    {% else %}
+                        <td colspan="5"><h4>게시글이 없습니다.</h4></td>
+                    {% endif %}
+                </tr>
+            {% endfor %}
+            <!-- <tr class="text-center">
+                <th colspan="5"><h4>첫번째 게시글을 작성해주세요 💦</h4></th>
+            </tr> -->
+        </tbody>
+    </table>
+
+    <nav aria-label="Page navigation example">
+        <ul class="pagination justify-content-center">
+            {% if bset.has_previous %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'board:index' %}?page=1&cate={{cate}}&kw={{kw}}">First</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'board:index' %}?page={{bset.previous_page_number}}&cate={{cate}}&kw={{kw}}">Previous</a>
+                </li>
+            {% else %}
+                <li class="page-item disabled">
+                    <a class="page-link">First</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link">Previous</a>
+                </li>
+            {% endif %}
+            {% for i in bset.paginator.page_range %}
+                {% if bset.number <= 2 %}
+                    {% if i <= 5 %}
+                        <li class="page-item"><a class="page-link {% if i == bset.number %}active{% endif %}" href="{% url 'board:index' %}?page={{i}}&cate={{cate}}&kw={{kw}}">{{i}}</a></li>
+                    {% endif %}
+                {% elif bset.number >= bset.paginator.num_pages|sub:1 %}
+                    {% if i >= bset.paginator.num_pages|sub:4 %}
+                        <li class="page-item"><a class="page-link {% if i == bset.number %}active{% endif %}" href="{% url 'board:index' %}?page={{i}}&cate={{cate}}&kw={{kw}}">{{i}}</a></li>
+                    {% endif %}
+
+                {% else %}
+                    {% if i <= bset.number|add:2 and i >= bset.number|sub:2 %}
+                        <li class="page-item"><a class="page-link {% if i == bset.number %}active{% endif %}" href="{% url 'board:index' %}?page={{i}}&cate={{cate}}&kw={{kw}}">{{i}}</a></li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+            {% if bset.has_next %}
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'board:index' %}?page={{bset.next_page_number}}&cate={{cate}}&kw={{kw}}">Next</a>
+                </li>
+                <li class="page-item">
+                    <a class="page-link" href="{% url 'board:index' %}?page={{bset.paginator.num_pages}}&cate={{cate}}&kw={{kw}}">END</a>
+                </li>
+            {% else %}
+                <li class="page-item">
+                    <a class="page-link disabled">Next</a>
+                </li>
+                <li class="page-item disabled">
+                    <a class="page-link">END</a>
+                </li>
+            {% endif %}
+        </ul>
+    </nav>
+
+    <form>
+        <div class=" row text-end">
+            <div class="col-sm-7"></div>
+            <div class="row col-sm-5">
+                <div class="col-auto">
+                    <select name='cate' class="form-control form-select form-select-sm" aria-label="Default select example">
+                        <option value="sub" {% if cate == 'sub' %}selected{% endif %}>제목</option>
+                        <option value="wri" {% if cate == 'wri' %}selected{% endif %}>작성자</option>
+                        <option value="con" {% if cate == 'con' %}selected{% endif %}>내용</option>
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <input name="kw" type="text" class="form-control form-control-sm" placeholder="검색어 입력">
+                </div>
+                <div class="col-sm-2">
+                    <button class="btn btn-dark form-control btn-sm">검색</button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+
+    <style>
+        .sub {
+            text-decoration: none;
+            color: black;
+            font-weight: bold;
+        }
+        .sub:hover{
+            color:brown;
+        }
+    </style>
+{% endblock %}

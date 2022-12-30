@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <h1><b>SIGNUP PAGE</b></h1>
+
+        <label class="form-label mt-5">USERNAME</label>
+        <input name="id" type="text" class="form-control">
+
+        <label class="form-label mt-4">PASSWORD</label>
+        <input name="pw" type="password" class="form-control">
+
+        <label class="form-label mt-4">CHECK PASSWORD</label>
+        <input name="cpw" type="password" class="form-control">
+
+        <label class="form-label mt-4">USERPIC</label>
+        <input name="up" type="file" class="form-control">
+
+        <label class="form-label mt-4">COMMENT</label>
+        <textarea name="com" class="form-control"></textarea> 
+
+        <div class="text-end mt-4">
+            <button class="btn btn-dark btn-lg">회원가입</button>
+        </div>
+    </form>
+{% endblock %}

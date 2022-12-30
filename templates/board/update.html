@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <form method="post">
+        {% csrf_token %}
+        <input name="sub" type="text" value="{{b.subject}}">
+        <div class="row mt-5">
+            <div class="col-sm-9">
+                <textarea name="con" class="form-control" style="height: 250px;">{{b.content}}</textarea>
+            </div>
+            <div class="col-sm-3">
+                <img src="{{ b.writer.getpic }}" width="100%">
+                <div class="text-center mt-3">
+                    <h4>written by <b>{{b.writer}}</b></h4>
+                </div>
+                <div class="text-end mt-2">
+                    {{b.pubdate | date:'Y년 m월 d일/H:i'}}
+                </div> 
+            </div>
+        </div>
+        <div class="text-end mt-4">
+            <button class="btn btn-dark">저장</button>
+            <a href="{% url 'board:detail' b.id %}"><button class="btn btn-dark" type="button">취소</button></a>
+        </div>    
+    </form>
+{% endblock %}

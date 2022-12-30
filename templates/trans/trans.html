@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <h1>TRANS</h1>
+    <form method="get">
+        {% csrf_token %}
+        <div class="row text-center">
+            <div class="col-sm-5">
+                <select name="lang1" class="form-control form-select">
+                    {% for i,j in t.items %}
+                        <option value="{{i}}" {% if ol == i %} selected {% endif %}>{{j}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="col-sm-2">
+                <a href="{% url 'trans:trans' %}?lang1={{tl}}&lang2={{ol}}&oc={{trcon}}" class="form-control btn btn-dark">Change</a>
+            </div>
+            <div class="col-sm-5">
+                <select name="lang2" class="form-control form-select">
+                    {% for i,j in t.items %}
+                        <option value="{{i}}" {% if tl == i %} selected {% endif %}>{{j}}</option>
+                    {% endfor %}
+                </select>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-sm-5">
+                <textarea name="oc" class='form-control' cols="30" rows="10" placeholder="번역할 내용을 입력하세요.">{{oricon}}</textarea>
+            </div>
+            <div class="col-sm-2 text-center" style="margin: auto;">
+                <h1>→</h1>
+            </div>
+            <div class="col-sm-5">
+                <textarea name="tc" class='form-control' cols="30" rows="10" disabled>{{trcon}}</textarea>
+            </div>
+        </div>
+        <br>
+        <div class="text-end">
+            <button class="btn btn-dark">번역</button>
+        </div>
+    </form>
+{% endblock %}

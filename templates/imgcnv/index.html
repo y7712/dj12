@@ -1,0 +1,82 @@
+{% extends 'base.html' %}
+
+{% block con %}
+    <h1><b>IMG CONVERSION</b></h1>
+    {% if not r1 and not r2%}
+        <label class="form-label mt-4">Image</label>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-sm-4">
+                    <input name="ph" type="file" class="form-control" onchange="readURL(this);">
+                </div>
+                <div class="col-sm-3 mt-2">
+                    <h4>( jpg, jpeg, png )</h4>
+                </div>
+            </div>
+            <br><br>
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="row">
+                        <div class="col-sm-1 mt-4" style="margin: auto;">
+                            <h4><b>Size</b></h4>
+                        </div>
+                        <div class="col-sm-4" style="margin: auto;">
+                            <b>가로(px)</b> <input name='wi' class="form-control" type="text" placeholder="Image width">
+                        </div>
+                        <div class="col-sm-4" style="margin: auto;">
+                            <b>세로(px)</b> <input name="hi" class="form-control" type="text" placeholder="Image height">
+                        </div>
+                        <div class="col-sm-2" style="margin: auto;">
+                            <div class="form-check mt-4 ">
+                                <input name='bw' class="form-check-input" type="checkbox" value="bw" id="flexCheckDefault">
+                                <label class="form-check-label" for="flexCheckDefault">
+                                    <h4><b>흑백</b></h4>
+                                </label>
+                            </div>
+                        </div>        
+                    </div>
+                </div>
+                <div class="col-sm-6 mt-4">
+                    <button class="btn btn-dark" style="width: 100px;"><b>변환</b></button>
+                </div>
+            </div>
+            <br>
+            <img id="blah" onerror="display='none'">
+        </form>
+    {% elif r1 and r2 %}
+        <br><br>
+        <div class="row text-center">
+            <div class="col-auto">
+                <b>변환전</b><br>
+                <img name='re' src="/media/cnvb/{{n}}_{{r1}}.{{ex}}">
+            </div>
+            <div class="col-auto text-center" style="margin: auto;">
+                <h1>>>>></h1>
+            </div>
+            <div class="col-auto">
+                <b>변환후</b><br>
+                <img src="/media/cnva/{{n}}_{{r2}}.{{ex}}">
+            </div>
+        </div>
+        <br><br>
+        <div class="text-end">
+            <a href="/media/cnva/{{n}}_{{r2}}.{{ex}}" class="btn btn-dark" download>다운로드</a>
+            <a href="{% url 'imgcnv:index' %}" class="btn btn-dark">취소</a>
+        </div>
+    {% endif %}
+
+    <script type="text/javascript">
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    im = document.getElementById("blah")
+                    im.removeAttribute("onerror");
+                    im.setAttribute("src", e.target.result);
+                }
+                reader.readAsDataURL(input.files[0]);
+            }
+        }
+    </script>
+{% endblock %}
